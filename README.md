@@ -10,7 +10,7 @@ As of 2022-8-2, only pprint is needed and only for nicely printing the dictionar
 1. Enter in the player names and their elos into config.py
 
       For each player, list their Elo or Elos as shown:
-      ```
+      ```python
       PLAYER_LIST = {'Player1': [2069, 2067],
                      'Player2': [1409, 1407],
                      'Player3': [1873, 1871],
