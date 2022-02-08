@@ -1,22 +1,9 @@
 import config
 import checks
-import sys
+
 import itertools as it
 import pprint as pp
 from statistics import mean, stdev
-
-
-def initialize():
-    player_multiple_check, players_remaining = checks.check_player_number_multiple()
-    if player_multiple_check:
-        print('Great! You have all the contestants needed for this program to work')
-    else:
-        if players_remaining == 1:
-            sys.exit('You have to add ' + str(players_remaining) + ' more contestant to make equal teams of ' + str(
-                config.TEAM_SIZE) + '.')
-        else:
-            sys.exit('You have to add ' + str(players_remaining) + ' more contestants to make equal teams of ' + str(
-                config.TEAM_SIZE) + '.')
 
 
 def determine_team_combos():
@@ -68,7 +55,7 @@ def find_best_iteration(data):
 
 
 if __name__ == '__main__':
-    initialize()
+    checks.initialize()
     combo_iterations = determine_team_combos()
     final_data = calculate_iteration_mean_stdev(combo_iterations)
 
@@ -77,4 +64,3 @@ if __name__ == '__main__':
         pp.pprint(final_data, sort_dicts=False)
     if config.PRINT_BEST_COMBINATION:
         pp.pprint(find_best_iteration(final_data), sort_dicts=False)
-
