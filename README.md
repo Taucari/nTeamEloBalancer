@@ -14,5 +14,6 @@ As of 2022-8-2, only pprint is needed and only for nicely printing the dictionar
 ### Extra Settings
 | Setting | Description |
 | --- | --- |
-| git status | List all new or modified files |
-| git diff | Show file differences that haven't been staged |
+| DECIMAL_PLACES | Number of decimal places to round to |
+| PRINT_ALL_COMBINATIONS | Use pprint to show all possible combinations of teams |
+| PRINT_BEST_COMBINATION | Use pprint to show best combination of teams where the standard deviation between teams is lowest |
