@@ -17,7 +17,7 @@ def check_player_number_multiple():
 
 
 def initialize():
-    if check_more_than_one_team():
+    if not check_more_than_one_team():
         sys.exit("You don't have enough players. Please add more.")
 
     player_multiple_check, players_remaining = check_player_number_multiple()
