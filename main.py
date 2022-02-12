@@ -54,7 +54,7 @@ def find_best_iteration(data):
             return data[i]
 
 
-if __name__ == '__main__':
+def run():
     print('Commencing Checks.')
     checks.initialize()
     print('Determining all possible teams.')
@@ -67,3 +67,7 @@ if __name__ == '__main__':
         pp.pprint(final_data, sort_dicts=False)
     if config.PRINT_BEST_COMBINATION:
         pp.pprint(find_best_iteration(final_data), sort_dicts=False)
+
+
+if __name__ == '__main__':
+    run()
