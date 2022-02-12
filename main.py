@@ -55,10 +55,13 @@ def find_best_iteration(data):
 
 
 if __name__ == '__main__':
+    print('Commencing Checks.')
     checks.initialize()
+    print('Determining all possible teams.')
     combo_iterations = determine_team_combos()
+    print('Calculating all team combinations.')
     final_data = calculate_iteration_mean_stdev(combo_iterations)
-
+    print('Number of Iterations: ' + str(len(final_data)))
     if config.PRINT_ALL_COMBINATIONS:
         print('---------===========All Iterations===========---------')
         pp.pprint(final_data, sort_dicts=False)
