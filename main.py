@@ -1,42 +1,52 @@
 import config
 import checks
-
+import numpy as np
 import itertools as it
 import pprint as pp
-from statistics import mean, stdev
 
 
 def determine_team_combos():
-    team_combos = list(list(i) for i in it.combinations(config.PLAYER_LIST, config.TEAM_SIZE))
-    c = [i for i in it.combinations(team_combos, int(len(config.PLAYER_LIST) / config.TEAM_SIZE)) if
-         len(set(tuple(sum(i, [])))) == len(tuple(sum(i, [])))]
+    number_of_teams = int(len(config.PLAYER_LIST) / config.TEAM_SIZE)
+    team_combos = [list(i) for i in it.combinations(config.PLAYER_LIST, config.TEAM_SIZE)]
+    c = [i for i in it.combinations(team_combos, number_of_teams) if
+         len(set(it.chain(*i))) == len(list(it.chain(*i)))]
     return c
+
+
+def fast_round(number):
+    p = 10 ** config.DECIMAL_PLACES
+    return int(number * p + 0.5) / p
+
+
+def member_elos(members):
+    return [np.average(config.PLAYER_LIST[member])
+            for member in members]
+
+
+def team_mean(members):
+    return fast_round(np.average(member_elos(members)))
+
+
+def team_stdev(members):
+    return fast_round(np.std(member_elos(members)))
+
+
+def iteration_mean_and_stdev(team_means):
+    it_mean = fast_round(np.average(team_means))
+    it_stdev = fast_round(np.std(team_means))
+    return it_mean, it_stdev
 
 
 def calculate_iteration_mean_stdev(combos):
     def calculate_team_mean_stdev(iteration):
-        def team_elos(members):
-            return [config.PLAYER_LIST.get(member)
-                    if len(config.PLAYER_LIST.get(member)) == 1
-                    else mean(config.PLAYER_LIST.get(member))
-                    for member in members]
-
-        def team_mean(members):
-            return round(mean(team_elos(members)), config.DECIMAL_PLACES)
-
-        def team_stdev(members):
-            return round(stdev(team_elos(members)), config.DECIMAL_PLACES)
-
         iteration_dict = {'Team ' + str(team + 1): {'Members': iteration[team],
-                                                    'Elos': team_elos(iteration[team]),
+                                                    'Elos': member_elos(iteration[team]),
                                                     'Team Mean': team_mean(iteration[team]),
                                                     'Team StDev': team_stdev(iteration[team])}
                           for team in range(len(iteration))}
 
-        iteration_mean = round(mean([iteration_dict[team_no]['Team Mean']
-                                     for team_no in iteration_dict]), config.DECIMAL_PLACES)
-        iteration_stdev = round(stdev([iteration_dict[team_no]['Team Mean']
-                                       for team_no in iteration_dict]), config.DECIMAL_PLACES)
+        iteration_mean, iteration_stdev = iteration_mean_and_stdev([iteration_dict[team_no]['Team Mean']
+                                                                    for team_no in iteration_dict])
 
         iteration_dict['Iteration Team Elo Mean'] = iteration_mean
         iteration_dict['Iteration Team Elo StDev'] = iteration_stdev
@@ -54,7 +64,7 @@ def find_best_iteration(data):
             return data[i]
 
 
-def run():
+def main():
     print('Commencing Checks.')
     checks.initialize()
     print('Determining all possible teams.')
@@ -70,4 +80,4 @@ def run():
 
 
 if __name__ == '__main__':
-    run()
+    main()
