@@ -2,3 +2,4 @@
 /.idea
 output.dat
 /profiler_logs/
+!/profiler_logs/placeholder.txt
