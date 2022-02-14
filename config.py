@@ -16,6 +16,7 @@ players.
 The only restriction is that every player name
 has to be unique and the number of players has
 to be a multiple of TEAM_SIZE
+
 """
 PLAYER_LIST = {'Moira#4231': [2919, 2700, 2606, 2366, 1667],
                'Trion#5840': [1624, 1454, 1297, 1287, 1192],
@@ -26,9 +27,7 @@ PLAYER_LIST = {'Moira#4231': [2919, 2700, 2606, 2366, 1667],
                'kuroneko#1765': [1448, 1409, 1070, 923],
                'SinisteRock#8632': [1878, 1840, 1821, 1479, 1431],
                'Crock0Dial#1100': [1489, 1416, 1314, 1241, 1207],
-               'Deadskwerl#3556': [1419, 1373, 1324, 1320, 1287],
-               'ZoulCash#9702': [1593, 1429, 1321, 1234, 1209],
-               'Stika#9712': [1979, 1958, 1696, 1485, 1381],
+
                }
 TEAM_SIZE = 3
 DECIMAL_PLACES = 2

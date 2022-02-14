@@ -7,10 +7,12 @@ import pprint as pp
 
 def determine_team_combos():
     number_of_teams = int(len(config.PLAYER_LIST) / config.TEAM_SIZE)
-    team_combos = [list(i) for i in it.combinations(config.PLAYER_LIST, config.TEAM_SIZE)]
-    c = [i for i in it.combinations(team_combos, number_of_teams) if
-         len(set(it.chain(*i))) == len(list(it.chain(*i)))]
-    return c
+    team_combos = [[*i] for i in it.combinations(config.PLAYER_LIST, config.TEAM_SIZE)]
+    print('Number of possible teams: ' + str(len(team_combos)))
+    print('Determining all possible combinations of teams.')
+    combo_team_combos = [i for i in it.combinations(team_combos, number_of_teams) if
+                         len(set(it.chain(*i))) == len(list(it.chain(*i)))]
+    return combo_team_combos
 
 
 def fast_round(number):
@@ -19,16 +21,15 @@ def fast_round(number):
 
 
 def member_elos(members):
-    return [np.average(config.PLAYER_LIST[member])
-            for member in members]
+    return [sum(config.PLAYER_LIST[member]) / len(config.PLAYER_LIST[member]) for member in members]
 
 
 def team_mean(members):
-    return fast_round(np.average(member_elos(members)))
+    return fast_round(sum(member_elos(members)) / len(member_elos(members)))
 
 
 def team_stdev(members):
-    return fast_round(np.std(member_elos(members)))
+    return fast_round(np.std(np.array(member_elos(members))))
 
 
 def iteration_mean_and_stdev(team_means):
@@ -71,7 +72,7 @@ def main():
     combo_iterations = determine_team_combos()
     print('Calculating all team combinations.')
     final_data = calculate_iteration_mean_stdev(combo_iterations)
-    print('Number of Iterations: ' + str(len(final_data)))
+    print('Number of Team Combinations: ' + str(len(final_data)))
     if config.PRINT_ALL_COMBINATIONS:
         print('---------===========All Iterations===========---------')
         pp.pprint(final_data, sort_dicts=False)
