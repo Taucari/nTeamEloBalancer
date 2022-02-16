@@ -10,10 +10,12 @@ def determine_team_combos():
     highest_players = determine_best_players(number_of_teams)
     lowest_players = determine_worst_players(number_of_teams)
     team_combos = [list(i) for i in it.combinations(config.PLAYER_LIST, config.TEAM_SIZE)
-                   # Omit teams containing more than one of the best players
-                   if len(set(highest_players).intersection(i)) < 2
-                   # Omit teams consisting of all the worst players
-                   if len(set(lowest_players).intersection(i)) < config.TEAM_SIZE]
+                   # Omit teams containing more than a certain number of the best players
+                   if len(set(highest_players).intersection(i)) <=
+                   config.NUMBER_OF_BEST_PLAYERS_ALLOWED_ON_ANY_ONE_TEAM
+                   # Omit teams containing more than a certain number of the worst players
+                   if len(set(lowest_players).intersection(i)) <=
+                   config.NUMBER_OF_WORST_PLAYERS_ALLOWED_ON_ANY_ONE_TEAM]
     print('Number of player combos for teams: ', str(len(team_combos)))
     combos_of_team_combos = [i for i in it.combinations(team_combos, number_of_teams) if
                              len(set(it.chain(*i))) == len(list(it.chain(*i)))]
