@@ -7,10 +7,27 @@ import pprint as pp
 
 def determine_team_combos():
     number_of_teams = int(len(config.PLAYER_LIST) / config.TEAM_SIZE)
-    team_combos = [list(i) for i in it.combinations(config.PLAYER_LIST, config.TEAM_SIZE)]
-    c = [i for i in it.combinations(team_combos, number_of_teams) if
-         len(set(it.chain(*i))) == len(list(it.chain(*i)))]
-    return c
+    highest_players = determine_best_players(number_of_teams)
+    lowest_players = determine_worst_players(number_of_teams)
+    team_combos = [list(i) for i in it.combinations(config.PLAYER_LIST, config.TEAM_SIZE)
+                   # Omit teams containing more than one of the best players
+                   if len(set(highest_players).intersection(i)) < 2
+                   # Omit teams consisting of all the worst players
+                   if len(set(lowest_players).intersection(i)) < config.TEAM_SIZE]
+    print('Number of player combos for teams: ', str(len(team_combos)))
+    combos_of_team_combos = [i for i in it.combinations(team_combos, number_of_teams) if
+                             len(set(it.chain(*i))) == len(list(it.chain(*i)))]
+    return combos_of_team_combos
+
+
+def determine_best_players(no_team):
+    return sorted(config.PLAYER_LIST, key=lambda k: sum(config.PLAYER_LIST[k]) / len(config.PLAYER_LIST[k]),
+                  reverse=True)[-no_team:]
+
+
+def determine_worst_players(no_team):
+    return sorted(config.PLAYER_LIST, key=lambda k: sum(config.PLAYER_LIST[k]) / len(config.PLAYER_LIST[k]),
+                  reverse=False)[-no_team:]
 
 
 def fast_round(number):
