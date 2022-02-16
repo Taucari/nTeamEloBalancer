@@ -17,6 +17,11 @@ def determine_team_combos():
                    if len(set(lowest_players).intersection(i)) <=
                    config.NUMBER_OF_WORST_PLAYERS_ALLOWED_ON_ANY_ONE_TEAM]
     print('Number of player combos for teams: ', str(len(team_combos)))
+    return team_combos
+
+
+def determine_combos_of_team_combos(team_combos):
+    number_of_teams = int(len(config.PLAYER_LIST) / config.TEAM_SIZE)
     combos_of_team_combos = [i for i in it.combinations(team_combos, number_of_teams) if
                              len(set(it.chain(*i))) == len(list(it.chain(*i)))]
     return combos_of_team_combos
@@ -87,8 +92,9 @@ def main():
     print('Commencing Checks.')
     checks.initialize()
     print('Determining all possible teams.')
-    combo_iterations = determine_team_combos()
+    combo_teams = determine_team_combos()
     print('Calculating all team combinations.')
+    combo_iterations = determine_combos_of_team_combos(combo_teams)
     final_data = calculate_iteration_mean_stdev(combo_iterations)
     print('Number of Iterations: ' + str(len(final_data)))
     if config.PRINT_ALL_COMBINATIONS:
