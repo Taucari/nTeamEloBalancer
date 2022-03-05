@@ -28,12 +28,12 @@ def determine_combos_of_team_combos(team_combos):
 
 
 def determine_best_players(no_team):
-    return sorted(config.PLAYER_LIST, key=lambda k: sum(config.PLAYER_LIST[k]) / len(config.PLAYER_LIST[k]),
+    return sorted(config.PLAYER_LIST, key=lambda k: config.PLAYER_LIST[k]['Mean'],
                   reverse=True)[-no_team:]
 
 
 def determine_worst_players(no_team):
-    return sorted(config.PLAYER_LIST, key=lambda k: sum(config.PLAYER_LIST[k]) / len(config.PLAYER_LIST[k]),
+    return sorted(config.PLAYER_LIST, key=lambda k: config.PLAYER_LIST[k]['Mean'],
                   reverse=False)[-no_team:]
 
 
@@ -42,17 +42,21 @@ def fast_round(number):
     return int(number * p + 0.5) / p
 
 
-def member_elos(members):
-    return [np.average(config.PLAYER_LIST[member])
+def retrieve_member_elos(members):
+    return [config.PLAYER_LIST[member]['Mean']
             for member in members]
 
 
+def retrieve_player_name(player_ids):
+    return [config.PLAYER_LIST[id]['Name'] for id in player_ids]
+
+
 def team_mean(members):
-    return fast_round(np.average(member_elos(members)))
+    return fast_round(np.average(retrieve_member_elos(members)))
 
 
 def team_stdev(members):
-    return fast_round(np.std(member_elos(members)))
+    return fast_round(np.std(retrieve_member_elos(members)))
 
 
 def iteration_mean_and_stdev(team_means):
@@ -63,8 +67,8 @@ def iteration_mean_and_stdev(team_means):
 
 def calculate_iteration_mean_stdev(combos):
     def calculate_team_mean_stdev(iteration):
-        iteration_dict = {'Team ' + str(team + 1): {'Members': iteration[team],
-                                                    'Elos': member_elos(iteration[team]),
+        iteration_dict = {'Team ' + str(team + 1): {'Members': retrieve_player_name(iteration[team]),
+                                                    'Elos': retrieve_member_elos(iteration[team]),
                                                     'Team Mean': team_mean(iteration[team]),
                                                     'Team StDev': team_stdev(iteration[team])}
                           for team in range(len(iteration))}
