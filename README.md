@@ -1,6 +1,8 @@
 # nTeamEloBalancer
 Finding the most balanced teams based on player elo.
 
+This is no longer updated. Please refer to: https://github.com/Taucari/EloBasedMatchMaker
+
 ## Requirements
 Check requirements.txt
 
